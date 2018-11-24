@@ -1,0 +1,29 @@
+version: "3"
+services:
+  piwigo:
+    image: tryan225/piwigo
+    networks:
+      - web
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:piwigo.example.com #changeme
+      - traefik.port=8000
+      - traefik.docker.network=web
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5
+    networks:
+      - internal
+    environment:
+      MYSQL_USER: "piwigo" #changeme
+      MYSQL_PASSWORD: "piwigo" #changeme
+      MYSQL_DATABASE: "piwigo" #changeme
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+
+networks:
+    web:
+        external: true
+    internal:
